@@ -1,13 +1,13 @@
 # Import necessary packages and libraries
-install.packages(c("dplyr", "readr", "tidyr","tidyverse","lubridate"))
+'install.packages(c("dplyr", "readr", "tidyr","tidyverse","lubridate"))
 library(dplyr)
 library(readr)
 library(tidyr)
 library(tidyverse)
-library(lubridate)
+library(lubridate)'
 
 # Set directory where the files are located
-setwd("D:/Projects/Capstone/Track 1/Data")
+'setwd("D:/Projects/Capstone/Track 1/Data")'
 
 # Import data (could also use the "lapply" function)
 Jan <- read_csv("D:/Projects/Capstone/Track 1/Data/202101-divvy-tripdata.csv")
