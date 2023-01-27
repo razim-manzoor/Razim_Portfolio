@@ -1,98 +1,56 @@
-# Import necessary packages and libraries
-'install.packages(c("dplyr", "readr", "tidyr","tidyverse","lubridate"))
-library(dplyr)
-library(readr)
-library(tidyr)
-library(tidyverse)
-library(lubridate)'
+<div align="center">
+  
+  ![GitHub repo size](https://img.shields.io/github/repo-size/codewithsadee/jack-portfolio)
+  ![GitHub stars](https://img.shields.io/github/stars/codewithsadee/jack-portfolio?style=social)
+  ![GitHub forks](https://img.shields.io/github/forks/codewithsadee/jack-portfolio?style=social)
+  [![Twitter Follow](https://img.shields.io/twitter/follow/codewithsadee?style=social)](https://twitter.com/intent/follow?screen_name=codewithsadee)
+  [![YouTube Video Views](https://img.shields.io/youtube/views/DdlVKS7MROY?style=social)](https://youtu.be/DdlVKS7MROY)
 
-# Set directory where the files are located
-'setwd("D:/Projects/Capstone/Track 1/Data")'
+  <br />
+  <br />
+  
+  <img src="./readme-images/project-logo.png" />
 
-# Import data (could also use the "lapply" function)
-Jan <- read_csv("D:/Projects/Capstone/Track 1/Data/202101-divvy-tripdata.csv")
-Feb <- read_csv("D:/Projects/Capstone/Track 1/Data/202102-divvy-tripdata.csv")
-Mar <- read_csv("D:/Projects/Capstone/Track 1/Data/202103-divvy-tripdata.csv")
-Apr <- read_csv("D:/Projects/Capstone/Track 1/Data/202104-divvy-tripdata.csv")
-May <- read_csv("D:/Projects/Capstone/Track 1/Data/202105-divvy-tripdata.csv")
-Jun <- read_csv("D:/Projects/Capstone/Track 1/Data/202106-divvy-tripdata.csv")
-Jul <- read_csv("D:/Projects/Capstone/Track 1/Data/202107-divvy-tripdata.csv")
-Aug <- read_csv("D:/Projects/Capstone/Track 1/Data/202108-divvy-tripdata.csv")
-Sep <- read_csv("D:/Projects/Capstone/Track 1/Data/202109-divvy-tripdata.csv")
-Oct <- read_csv("D:/Projects/Capstone/Track 1/Data/202110-divvy-tripdata.csv")
-Nov <- read_csv("D:/Projects/Capstone/Track 1/Data/202111-divvy-tripdata.csv")
-Dec <- read_csv("D:/Projects/Capstone/Track 1/Data/202112-divvy-tripdata.csv")
+  <h2 align="center">Jack - Personal portfolio</h2>
 
-# Bind all of the data frames together into one single data frame
-data_list <- list(Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec)
-cyclist_data <- bind_rows(data_list)
+  This website is fully responsive personal portfolio, <br />Responsive for all devices, built using HTML, CSS, and JavaScript.
 
-# Clean Data - Format date and time/Create a column for duration
-cyclist_data$started_at = ymd_hms(cyclist_data$started_at)
-cyclist_data$ended_at = ymd_hms(cyclist_data$ended_at)
-cyclist_data$duration = as.numeric(difftime(cyclist_data$ended_at, cyclist_data$started_at, units = "mins"))
+  <a href="https://codewithsadee.github.io/jack-portfolio/"><strong>➥ Live Demo</strong></a>
 
-# Create a column for member type
-cyclist_data <- cyclist_data %>%
-  mutate(member_type = ifelse(member_casual == "casual", "casual","annual"))
+</div>
 
-# Removing missing values
-cyclist_data <- cyclist_data %>%
-  filter(!is.na(duration))
+<br />
 
-# Removing duplicates
-cyclist_data <- cyclist_data %>%
-  distinct()
+### Demo Screeshots
 
-# Check for outliers
-boxplot(cyclist_data$duration, main = "Duration of Rides", xlab = "Duration (minutes)")
+![Jack Portfolio Desktop Demo](./readme-images/desktop.png "Desktop Demo")
 
-# Removing outliers
-cyclist_data <- cyclist_data %>%
-  filter(cyclist_data$duration > quantile(cyclist_data$duration, 0.95))
+### Prerequisites
 
-# Create a summary of the data
-summary_data <- cyclist_data %>%
-  group_by(member_type) %>%
-  summarise(avg_duration = mean(duration),
-            median_duration = median(duration),
-            total_rides = n(),
-            avg_rides_per_week = total_rides/52)
+Before you begin, ensure you have met the following requirements:
 
-# Plot the average duration of rides by member type
-ggplot(cyclist_data, aes(x = member_type, y = duration))+
-  geom_boxplot(fill = "#0077c9")+
-  ggtitle("Average Duration of Rides by Member Types (Minutes)")+
-  xlab("Member Type") + ylab("Duration (Minutes)")+
-  theme_minimal()+
-  theme(plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
-        axis.title = element_text(size = 12, face = "bold"),
-        axis.text = element_text(size = 12)) +
-  geom_hline(yintercept = median(cyclist_data$duration), color = "#ffc107", linetype = "dashed")+
-  geom_vline(xintercept = c("Customer", "Subscriber"), color = "#ffc107", linetype = "dashed")
+* [Git](https://git-scm.com/downloads "Download Git") must be installed on your operating system.
 
-# Plot the total number of rides by member type
-ggplot(cyclist_data, aes(x = member_type, fill = member_type))+
-  geom_bar(stat = "count", color = "black")+
-  ggtitle("Total Number of Rides by Member Type")+
-  xlab("Member Type")+
-  ylab("Number of Rides")+
-  theme_minimal()+
-  theme(plot.title = element_text(hjust = 0.5, size = 14),
-        axis.title = element_text(size = 12),
-        axis.text = element_text(size = 12),
-        legend.title = element_blank(),
-        panel.grid.major = element_line(color = "lightgray", size = 0.5))
+### Run Locally
 
-# Plot the average number of rides per week by member type
-ggplot(summary_data, aes(x = member_type, y = avg_rides_per_week)) +
-  geom_col(aes(fill = member_type), width = 0.8, color = "black") +
-  ggtitle("Average Number of Rides per Week by Member Type") +
-  xlab("Member Type") + ylab("Average Number of Rides per Week") +
-  theme_minimal() +
-  theme(plot.title = element_text(hjust = 0.5, size = 14),
-        axis.text = element_text(size = 12),
-        axis.title = element_text(size = 12),
-        legend.title = element_blank(),
-        panel.grid.major = element_line(color = "lightgray", size = 0.5))
+To run **jack-portfolio** locally, run this command on your git bash:
 
+Linux and macOS:
+
+```bash
+sudo git clone https://github.com/codewithsadee/jack-portfolio.git
+```
+
+Windows:
+
+```bash
+git clone https://github.com/codewithsadee/jack-portfolio.git
+```
+
+### Contact
+
+If you want to contact with me you can reach me at [Twitter](https://www.twitter.com/codewithsadee).
+
+### License
+
+This project is **free to use** and does not contains any license.
